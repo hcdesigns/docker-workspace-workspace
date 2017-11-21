@@ -66,7 +66,7 @@ RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh
         nvm install ${NODE_VERSION} && \
         nvm use ${NODE_VERSION} && \
         nvm alias ${NODE_VERSION} && \
-        npm install -g gulp yarn webpack
+        npm install -g gulp
 
 # Wouldn't execute when added to the RUN statement in the above block
 # Source NVM when loading bash since ~/.profile isn't loaded on non-login shell
@@ -76,6 +76,16 @@ RUN echo "" >> ~/.bashrc && \
 
 # Add PATH for node
 ENV PATH $PATH:$NVM_DIR/versions/node/v${NODE_VERSION}/bin
+
+#####################################
+# YARN:
+#####################################
+USER hcdesigns
+
+RUN [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" && \
+    curl -o- -L https://yarnpkg.com/install.sh | bash; \
+    echo "" >> ~/.bashrc && \
+    echo 'export PATH="$HOME/.yarn/bin:$PATH"' >> ~/.bashrc
 
 #
 #--------------------------------------------------------------------------
