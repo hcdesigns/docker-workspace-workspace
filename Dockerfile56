@@ -21,7 +21,6 @@ RUN curl -o magerun https://raw.githubusercontent.com/netz98/n98-magerun/master/
 
 # Install composer and add its bin to the PATH.
 RUN curl -s http://getcomposer.org/installer | php && \
-    echo "export PATH=${PATH}:/var/www/vendor/bin" >> ~/.bashrc && \
     mv composer.phar /usr/local/bin/composer
 
 # Source the bash
@@ -44,7 +43,7 @@ RUN groupadd -g ${PGID} hcdesigns && \
 # Set Timezone
 #####################################
 
-RUN ln -snf /usr/share/zoneinfo/UTC /etc/localtime && echo UTC > /etc/timezone
+RUN ln -snf /usr/share/zoneinfo/CET /etc/localtime && echo CET > /etc/timezone
 
 #####################################
 # Crontab
