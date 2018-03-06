@@ -19,7 +19,8 @@ RUN curl -sL https://deb.nodesource.com/setup_9.x | bash - &&\
     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - &&\
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 
-RUN apt-get update -yqq && \
+RUN add-apt-repository ppa:deadsnakes/ppa && \
+    apt-get update -yqq && \
     apt-get install -y python2.7 && \
     apt-get install -y nodejs yarn
 
