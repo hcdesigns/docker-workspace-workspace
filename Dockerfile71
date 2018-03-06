@@ -2,33 +2,13 @@ FROM laradock/workspace:1.9-71
 
 LABEL maintainer="Harvey Chow <harvey@hcdesigns.nl>"
 
-#####################################
-# Magerun:
-#####################################
-
-RUN curl -o magerun https://raw.githubusercontent.com/netz98/n98-magerun/master/n98-magerun.phar && \
-    chmod +x ./magerun && \
-    ./magerun selfupdate && \
-    cp ./magerun /usr/local/bin/ && \
-    rm ./magerun && \
-    apt-get update && \
-    apt-get install -qy mysql-client && \
+RUN apt-get update && \
     apt-get purge -y --auto-remove
-
-#####################################
-# Composer:
-#####################################
-
-# Install composer and add its bin to the PATH.
-RUN curl -s http://getcomposer.org/installer | php && \
-    mv composer.phar /usr/local/bin/composer
-
-# Source the bash
-RUN . ~/.bashrc
 
 #####################################
 # Non-Root User:
 #####################################
+USER root
 
 # Add a non-root user to prevent files being created with root permissions on host machine.
 ENV PUID 1000
@@ -42,6 +22,7 @@ RUN groupadd -g ${PGID} hcdesigns && \
 #####################################
 # Set Timezone
 #####################################
+USER root
 
 RUN ln -snf /usr/share/zoneinfo/CET /etc/localtime && echo CET > /etc/timezone
 
@@ -53,11 +34,21 @@ USER root
 COPY ./crontab /etc/cron.d
 RUN chmod -R 644 /etc/cron.d
 
-USER hcdesigns
+#####################################
+# Magerun:
+#####################################
+USER root
+
+RUN curl -o magerun https://raw.githubusercontent.com/netz98/n98-magerun/master/n98-magerun.phar && \
+    chmod +x ./magerun && \
+    ./magerun selfupdate && \
+    cp ./magerun /usr/local/bin/ && \
+    rm ./magerun
 
 #####################################
 # Node / NVM:
 #####################################
+USER hcdesigns
 
 # Check if NVM needs to be installed
 ARG NODE_VERSION=stable
@@ -107,7 +98,6 @@ RUN if [ ${NPM_REGISTRY} ]; then \
 #####################################
 # YARN:
 #####################################
-
 USER hcdesigns
 
 ARG INSTALL_YARN=false
