@@ -1,9 +1,62 @@
-FROM laradock/workspace:1.9-71
+FROM ubuntu:16.04
 
 LABEL maintainer="Harvey Chow <harvey@hcdesigns.nl>"
 
+RUN DEBIAN_FRONTEND=noninteractive
+
+# Add the "PHP 7" ppa
 RUN apt-get update && \
-    apt-get purge -y --auto-remove
+    apt-get install -y curl locales software-properties-common python-software-properties
+
+RUN locale-gen en_US.UTF-8
+
+ENV LANGUAGE=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+ENV LC_CTYPE=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV TERM xterm
+
+RUN add-apt-repository ppa:ondrej/php && \
+    apt-get update
+
+# Install "PHP Extentions", "libraries", "Software's"
+RUN apt-get install -y \
+        php7.1-cli \
+        php7.1-common \
+        php7.1-curl \
+        php7.1-intl \
+        php7.1-json \
+        php7.1-xml \
+        php7.1-mbstring \
+        php7.1-mcrypt \
+        php7.1-mysql \
+        php7.1-pgsql \
+        php7.1-sqlite \
+        php7.1-sqlite3 \
+        php7.1-zip \
+        php7.1-bcmath \
+        php7.1-memcached \
+        php7.1-gd \
+        php7.1-dev \
+        pkg-config \
+        libcurl4-openssl-dev \
+        libedit-dev \
+        libssl-dev \
+        libxml2-dev \
+        xz-utils \
+        libsqlite3-dev \
+        sqlite3 \
+        git \
+        curl \
+        vim \
+        nano \
+    && apt-get clean
+
+# Source the bash
+# RUN . ~/.bashrc
+
+# RUN apt-get update && \
+#     apt-get purge -y --auto-remove
 
 #####################################
 # Non-Root User:
@@ -14,6 +67,14 @@ ENV PGID 1000
 
 RUN groupadd -g ${PGID} hcdesigns && \
     useradd -u ${PUID} -g hcdesigns -m hcdesigns
+
+#####################################
+# Composer:
+#####################################
+# Install composer and add its bin to the PATH.
+RUN curl -s http://getcomposer.org/installer | php && \
+    echo "export PATH=${PATH}:/var/www/vendor/bin" >> ~/.bashrc && \
+    mv composer.phar /usr/local/bin/composer
 
 #####################################
 # Python, NodeJS, yarn
