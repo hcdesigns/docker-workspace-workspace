@@ -43,6 +43,7 @@ RUN curl -o magerun https://raw.githubusercontent.com/netz98/n98-magerun/master/
 #####################################
 # Node / NVM:
 #####################################
+USER hcdesigns
 
 # Check if NVM needs to be installed
 ARG NODE_VERSION=stable
@@ -92,7 +93,6 @@ RUN if [ ${NPM_REGISTRY} ]; then \
 #####################################
 # YARN:
 #####################################
-
 USER hcdesigns
 
 ARG INSTALL_YARN=false
