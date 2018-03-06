@@ -5,96 +5,43 @@ LABEL maintainer="Harvey Chow <harvey@hcdesigns.nl>"
 #####################################
 # Non-Root User:
 #####################################
-
 # Add a non-root user to prevent files being created with root permissions on host machine.
 ENV PUID 1000
 ENV PGID 1000
 
 RUN groupadd -g ${PGID} hcdesigns && \
-    useradd -u ${PUID} -g hcdesigns -m hcdesigns && \
-    apt-get update -yqq && \
-    apt-get install -y python2.7
+    useradd -u ${PUID} -g hcdesigns -m hcdesigns
+
+#####################################
+# Python, NodeJS, yarn
+#####################################
+RUN curl -sL https://deb.nodesource.com/setup_9.x | bash - &&\
+    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - &&\
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+
+RUN apt-get update -yqq && \
+    apt-get install -y python2.7 && \
+    apt-get install -y nodejs yarn
 
 #####################################
 # Set Timezone
 #####################################
-
 RUN ln -snf /usr/share/zoneinfo/CET /etc/localtime && echo CET > /etc/timezone
 
 #####################################
 # Crontab
 #####################################
-USER root
-
 COPY ./crontab /etc/cron.d
 RUN chmod -R 644 /etc/cron.d
 
 #####################################
 # Magerun:
 #####################################
-USER root 
-
 RUN curl -o magerun https://raw.githubusercontent.com/netz98/n98-magerun/master/n98-magerun.phar && \
     chmod +x ./magerun && \
     ./magerun selfupdate && \
     cp ./magerun /usr/local/bin/ && \
     rm ./magerun
-
-#####################################
-# Node / NVM:
-#####################################
-USER hcdesigns
-
-# Check if NVM needs to be installed
-ARG NODE_VERSION=stable
-ENV NODE_VERSION ${NODE_VERSION}
-ENV NVM_DIR /home/hcdesigns/.nvm
-RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash && \
-        . $NVM_DIR/nvm.sh && \
-        nvm install ${NODE_VERSION} && \
-        nvm use ${NODE_VERSION} && \
-        nvm alias ${NODE_VERSION} && \
-        npm install -g gulp bower vue-cli
-
-# Wouldn't execute when added to the RUN statement in the above block
-# Source NVM when loading bash since ~/.profile isn't loaded on non-login shell
-RUN echo "" >> ~/.bashrc && \
-    echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.bashrc && \
-    echo '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm' >> ~/.bashrc
-
-# Add NVM binaries to root's .bashrc
-USER root
-
-RUN echo "" >> ~/.bashrc && \
-    echo 'export NVM_DIR="/home/hcdesigns/.nvm"' >> ~/.bashrc && \
-    echo '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm' >> ~/.bashrc
-
-# Add PATH for node
-ENV PATH $PATH:$NVM_DIR/versions/node/v${NODE_VERSION}/bin
-
-#####################################
-# YARN:
-#####################################
-USER hcdesigns
-
-ARG YARN_VERSION=latest
-ENV YARN_VERSION ${YARN_VERSION}
-
-RUN [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" && \
-    if [ ${YARN_VERSION} = "latest" ]; then \
-        curl -o- -L https://yarnpkg.com/install.sh | bash; \
-    else \
-        curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version ${YARN_VERSION}; \
-    fi && \
-    echo "" >> ~/.bashrc && \
-    echo 'export PATH="$HOME/.yarn/bin:$PATH"' >> ~/.bashrc
-
-# Add YARN binaries to root's .bashrc
-USER root
-
-RUN echo "" >> ~/.bashrc && \
-    echo 'export YARN_DIR="/home/hcdesigns/.yarn"' >> ~/.bashrc && \
-    echo 'export PATH="$YARN_DIR/bin:$PATH"' >> ~/.bashrc
 
 #
 #--------------------------------------------------------------------------
