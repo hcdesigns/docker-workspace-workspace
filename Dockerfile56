@@ -1,4 +1,4 @@
-FROM hcdesigns/workspace:1.9-56
+FROM laradock/workspace:1.9-56
 
 LABEL maintainer="Harvey Chow <harvey@hcdesigns.nl>"
 
