@@ -59,7 +59,8 @@ RUN apt-get install -y  \
         php5.6-bcmath \
         php5.6-memcached \
         php5.6-gd \
-        php5.6-dev
+        php5.6-dev \
+        php5.6-soap
 
 #####################################
 # Non-Root User:
