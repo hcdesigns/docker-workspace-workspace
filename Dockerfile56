@@ -90,13 +90,13 @@ RUN apt-get update && \
 RUN curl -sL -O https://files.magerun.net/n98-magerun.phar &&\
     chmod +x ./n98-magerun.phar && \
     mv ./n98-magerun.phar magerun && \
-    mv magerun /usr/local/bin/
+    mv magerun /usr/bin/
 
 # Magerun magento 2
-RUN curl -sL -O https://files.magerun.net/n98-magerun2-latest.phar &&\
-    chmod +x ./n98-magerun2.phar && \
-    mv ./n98-magerun2.phar magerun2 && \
-    mv ./magerun2 /usr/local/bin/
+RUN curl -sL -O https://files.magerun.net/n98-magerun2.phar &&\
+    chmod +x ./n98-magerun2.phar &&\
+    mv ./n98-magerun2.phar magerun2 &&\
+    mv ./magerun2 /usr/bin/
 
 #
 #--------------------------------------------------------------------------
