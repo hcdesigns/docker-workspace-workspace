@@ -102,7 +102,7 @@ RUN curl -sL -O https://files.magerun.net/n98-magerun.phar &&\
 
 # Magerun magento 2
 RUN curl -sL -O https://files.magerun.net/n98-magerun2-latest.phar &&\
-    chmod +x ./n98-magerun2.phar
+    chmod +x ./n98-magerun2.phar && \
     mv ./n98-magerun.phar magerun2 && \
     mv ./magerun2 /usr/local/bin/
 
