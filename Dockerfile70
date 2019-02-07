@@ -18,7 +18,8 @@ RUN apt-get update && \
         xz-utils \
         git \
         vim \
-        nano
+        nano \
+        mysql-client
 
 #####################################
 # Install python (required for several npm builds)
@@ -90,6 +91,21 @@ RUN curl -sL https://deb.nodesource.com/setup_9.x | bash - &&\
 
 RUN apt-get update && \
     apt-get install -y nodejs yarn
+
+#####################################
+# Magerun for Magento 1 & 2
+#####################################
+# Magerun magento 1
+RUN curl -sL -O https://files.magerun.net/n98-magerun.phar &&\
+    chmod +x ./n98-magerun.phar && \
+    mv ./n98-magerun.phar magerun && \
+    mv magerun /usr/local/bin/
+
+# Magerun magento 2
+RUN curl -sL -O https://files.magerun.net/n98-magerun2-latest.phar &&\
+    chmod +x ./n98-magerun2.phar
+    mv ./n98-magerun.phar magerun2 && \
+    mv ./magerun2 /usr/local/bin/
 
 #
 #--------------------------------------------------------------------------

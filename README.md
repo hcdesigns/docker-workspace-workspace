@@ -7,6 +7,7 @@ Also installs:
 * Python 2.7
 * NodeJS 9 (NPM included)
 * Yarn latest
+* Magerun for magento 1 and 2
 
 Use with:
 * [hcdesigns/docker-workspace-php-fpm](https://github.com/hcdesigns/docker-workspace-php-fpm) (5.6 + 7.0 + 7.1)
