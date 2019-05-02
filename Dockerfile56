@@ -19,8 +19,7 @@ RUN apt-get update && \
         git \
         vim \
         nano \
-        mysql-client \
-        php7.2-xls
+        mysql-client
 
 #####################################
 # Install python (required for several npm builds)

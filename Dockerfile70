@@ -19,8 +19,7 @@ RUN apt-get update && \
         git \
         vim \
         nano \
-        mysql-client \
-        php7.2-xls
+        mysql-client
 
 #####################################
 # Install python (required for several npm builds)
@@ -63,7 +62,8 @@ RUN apt-get install -y \
         php7.0-memcached \
         php7.0-gd \
         php7.0-dev \
-        php7.0-soap
+        php7.0-soap \
+        php7.0-xls
 
 #####################################
 # Non-Root User:
