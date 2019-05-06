@@ -15,6 +15,7 @@ RUN apt-get update && \
         libedit-dev \
         libssl-dev \
         libxml2-dev \
+        libxslt-dev \
         xz-utils \
         git \
         vim \
